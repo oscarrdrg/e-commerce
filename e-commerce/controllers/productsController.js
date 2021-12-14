@@ -56,7 +56,8 @@ exports.createCart = async (req, res) => {
 
 exports.deleteCart = async (req, res) => {
     const cart = await Cart.findOne({
-        idProduct: req.body.id
+        idProduct: req.body.id,
+        user:req.body.user
     })
     if(cart){
         cart.remove();
