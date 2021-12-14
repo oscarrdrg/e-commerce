@@ -1,0 +1,8 @@
+mixin forgotForm()
+
+ form.form(action='/account/forgot' method='POST' enctype='application/x-www-form-urlencoded')
+    .mb-3
+        label(for="email" class="form-label") Email
+        p
+            input(class="form-control" type="email" name="email")
+    button(type="submit" class="btn btn-primary" style="background-color:green;border-color:green;color:white") Reset my password

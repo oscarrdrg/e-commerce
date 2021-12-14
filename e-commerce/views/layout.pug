@@ -1,0 +1,83 @@
+doctype html
+html
+  head
+    title= `${title}`
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel="stylesheet" href='public/icons/font-awesome/css/fontawesome.min.css')
+    link(rel="shortcut icon" type="image/png" href="/icons/doughnut.png")
+    
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+    block header
+      nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
+        div.container-fluid
+          a.navbar-brand(href='/')
+            img(src="/icons/foto.png" alt="" width="70" height="70" title="Bootstrap")
+            i E-Commerce
+          button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+            span.navbar-toggler-icon
+          .collapse.navbar-collapse#navbarNav
+            ul.navbar-nav
+              each item in h.menu
+                li.nav-item
+                  a.nav-link(href=`${item.slug}`)
+                    span #{item.title}
+
+            .form-inline
+              input.form-control.mr-sm-2(type="text" placeholder="Find products..." name="search")
+              .search__results
+            ul.navbar-nav.ms-auto
+              if user
+                li.nav-item
+                    a.nav-link(href='/cart')
+                      i.fa.fa-sign-out(style="padding-right:5px")
+                      |Shopping Cart(0)
+                li.nav-item
+                    a.nav-link(href='/add')
+                      i.fa.fa-sign-out(style="padding-right:5px")
+                      |Add
+                li.nav-item
+                   a.nav-link(href='/account')
+                      i.fa.fa-sign-out(style="padding-right:5px")
+                      span #{user.name}
+                li.nav-item
+                  a.nav-link(href='/history')
+                    i.fa.fa-user-circle(style="padding-right:5px")
+                    |History
+                li.nav-item
+                  a.nav-link(href='/logout')
+                    i.fa.fa-sign-out(style="padding-right:5px")
+                    |Log Out
+              else
+                li.nav-item
+                  a.nav-link(href='/register')
+                    i.fa.fa-user(style="padding-right:5px")
+                    |Sign Up
+                li.nav-item
+                  a.nav-link(href='/login')
+                    i.fa.fa-sign-in(style="padding-right:5px")
+                    |Login
+  
+    block messages
+      .flashes
+        if flashes
+          - const categories = Object.keys(flashes)
+          each category in categories
+            each message in flashes[category]
+              .alert(class=`${category}`)
+                  //- el != nos permite interpretar el HTML del "message"
+                  //- req.flash('error', `hola <strong>que</strong> tal`);
+                  //- usar = meteria el texto en plano
+                  != message
+                  span.closebtn(onClick="this.parentElement.remove()") &times;
+                  
+    .content
+      block content
+
+    block scripts
+      script(src="/dist/jquery-3.6.0.slim.min.js")
+      script(src="/dist/bootstrap.bundle.min.js")
+      script(src="/dist/app.bundle.js")
+
+

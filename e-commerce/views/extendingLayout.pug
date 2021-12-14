@@ -1,0 +1,28 @@
+//- vamos a EXTENDER el layout.pug
+extends layout
+
+//-In the “testLayout.pug” there is an element named "block content". 
+//-Whatever we indented here, will appear in that part of the layout
+block content
+    //- vamos a usar un modulo externo que tenemos el la variable "h" de los LOCALS
+    //-h2 sale ends #{h.moment().endOf('day').fromNow()}
+    //-pre= h.dump(locals)
+
+    h2 <i>Welcome to E-Commerce!</i>
+    <b>Alumno:</b> Óscar Rodrigo López<br>
+    <b>Profesor:</b> Alexandre Viejo<br>
+    <i>PRÁCTICA 1: NodeJS-Express</i>
+    footer
+        .container
+            p
+            | &copy; 2021 |
+            i.fa.fa-value(aria-hidden='true') &nbsp;
+     
+            a(href='#') View Source
+    
+        
+            
+    
+    
+   
+

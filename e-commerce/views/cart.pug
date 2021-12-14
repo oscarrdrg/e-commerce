@@ -1,0 +1,27 @@
+
+extends layout
+include mixins/_productCardFromCart
+
+
+block content
+    .container
+        h2 #{title}
+        p
+        .carts 
+            each product in products  
+                    each cart in carts  
+                        if(product._id == cart.idProduct )
+                            if(cart.user == user.email)
+                             +productCardFromCart(product)
+    
+    p
+    <div> 
+        h5 Total price: <span id="total"></span>
+    </div>
+    <div>
+        <h2 style='padding-top:20px'><u> Payment                       
+        <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
+        <script>paypal.Buttons().render('body');</script> 
+    </div>
+    
+    

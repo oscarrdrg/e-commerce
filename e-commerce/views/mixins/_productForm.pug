@@ -1,0 +1,20 @@
+mixin productForm(product = {})
+
+
+ form(action=`/add/` method="POST" enctype="multipart/form-data")
+    .mb-3
+        label(for="name" class="form-label") Name
+        p
+            input(class="formcontrol" type="text" name="name")
+
+    .mb-3
+        label(for="price" class="form-label") Price
+        p
+            input(class="formcontrol" type= "text" name="price")
+    .mb-3
+        label(for="photo" class="form-label") Photo
+        p
+            input(class="formcontrol" type="file" name="photo" id="photo" accept="image/gif, image/png, image/jpeg")
+        if product.photo
+            img(src=`/uploads/${product.photo}` alt=product.name width=200)
+    button(type="submit" class="btn btn-primary" style="background-color:green;border-color:green;color:white") Save

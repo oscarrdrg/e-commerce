@@ -1,0 +1,10 @@
+extends layout
+
+include mixins/_productCard
+
+block content
+    .container
+        h2= title
+        .products
+            each product in products
+                +productCard(product)
