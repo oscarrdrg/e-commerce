@@ -14,14 +14,29 @@ block content
                             if(cart.user == user.email)
                              +productCardFromCart(product)
     
-    p
+        p
     <div> 
-        h5 Total price: <span id="total"></span>
+        h5 Total price: 
+            each product in products  
+                    each cart in carts  
+                        if(product._id == cart.idProduct )
+                            if(cart.user == user.email)
+                                span #{product.price}+
     </div>
     <div>
         <h2 style='padding-top:20px'><u> Payment                       
-        <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
-        <script>paypal.Buttons().render('body');</script> 
     </div>
+
+    block scripts
+    <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
+    <script>paypal.Buttons().render('body');</script>  
+ 
+   
+   
+
+
+    
+        
+    
     
     
