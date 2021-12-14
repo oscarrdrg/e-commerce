@@ -16,12 +16,14 @@ block content
     
         p
     <div> 
-        h5 Total price: 
+        <h5><i> Purchase: </h5></i>
             each product in products  
                     each cart in carts  
                         if(product._id == cart.idProduct )
                             if(cart.user == user.email)
-                                span #{product.price}+
+                                span <b>Product:</b> #{product.name}<br>
+                                span <b>Price:</b> #{product.price}€<p>
+                                span --------------------------------<p>
     </div>
     <div>
         <h2 style='padding-top:20px'><u> Payment                       
