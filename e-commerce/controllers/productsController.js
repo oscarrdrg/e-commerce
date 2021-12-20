@@ -19,10 +19,16 @@ const multerOptions = {
 };
 
 //exports -> global variable -> everything within can be imported
-exports.homePage = (req, res) => {
+exports.homePage = async (req, res) => {
+    const carts = await Cart.find();
+    let totalCarts = 0;
 
+    carts.forEach((cart)=>{
+        totalCarts = totalCarts + cart.num;
+    })
     res.render('extendingLayout', {
-        title: 'E-Commerce'
+        title: 'E-Commerce',
+        total: totalCarts
     }); //finalmente, hacemos el RESPONSE.
 };
 
@@ -44,10 +50,13 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.createCart = async (req, res) => {
+    const carts = await Cart.find();
     const cart = new Cart({
         idProduct: req.body.id,
-        user: req.body.user
+        user: req.body.user,
+        num: 1
     });
+    
     const savedCart = await cart.save();
     console.log('Cart saved!');
     req.flash('success', `Successfully added to cart ${cart.idProduct}.`);
@@ -57,15 +66,15 @@ exports.createCart = async (req, res) => {
 exports.deleteCart = async (req, res) => {
     const cart = await Cart.findOne({
         idProduct: req.body.id,
-        user:req.body.user
+        user: req.body.user
     })
-    if(cart){
+    if (cart) {
         cart.remove();
         req.flash('success', `Successfully deleted to cart`)
-    }else{
+    } else {
         req.flash('error', `Error: Cannot delete the product`)
     }
-    
+
     res.redirect(`/cart`);
 };
 
@@ -140,13 +149,19 @@ exports.searchProducts = async (req, res) => {
     });
 };
 
-exports.cart = async(req, res) =>{
+exports.cart = async (req, res) => {
     const carts = await Cart.find();
-    const products = await Product.find();
+    let precioFinal = 0;
+
+    carts.forEach((cart)=>{
+        precioFinal = precioFinal + cart.idProduct.price;
+    })
+
     res.render('cart', {
-        title:'Shopping Cart',
+        title: 'Shopping Cart',
         carts: carts,
-        products : products
+        precio: precioFinal
     });
+
 
 }

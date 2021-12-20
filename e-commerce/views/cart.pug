@@ -7,23 +7,19 @@ block content
     .container
         h2 #{title}
         p
-        .carts 
-            each product in products  
-                    each cart in carts  
-                        if(product._id == cart.idProduct )
-                            if(cart.user == user.email)
-                             +productCardFromCart(product)
+        .carts  
+            each cart in carts  
+                +productCardFromCart(cart, cart.idProduct)
     
         p
     <div> 
-        <h5><i><u> Purchase: </h5></i></u>
-            each product in products  
+        <h5><i><u> Purchase: </h5></i></u> 
                     each cart in carts  
-                        if(product._id == cart.idProduct )
-                            if(cart.user == user.email)
-                                span <b>Product:</b> #{product.name}<br>
-                                span <b>Price:</b> #{product.price}€<p>
-                                span --------------------------------<p>
+                        span <b>Product:</b> #{cart.idProduct.name}<br>
+                        span <b>Price:</b> #{cart.idProduct.price}€<p>
+                        span --------------------------------<p>
+                    span <b>Total:</b> #{precio}€<p>
+                                
     </div>
     <div>
         <h2 style='padding-top:20px'><u> Payment                       
@@ -32,7 +28,7 @@ block content
     block scripts
     <script src="https://www.paypal.com/sdk/js?client-id=test"></script>
     <script>paypal.Buttons().render('body');</script>  
- 
+   
    
    
 

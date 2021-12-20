@@ -10,54 +10,15 @@ const authController = require('../controllers/authController');
 const productsController = require('../controllers/productsController');
 const userController = require('../controllers/userController');
 
-router.get('/', (req, res) => {
-  //le pasamos un objeto con el "title" de la página. Esta información se pone en
-  //la estructura "LOCALS" de la RESPONSE. Otras variables
-  //que necesita el layout las sacará de valores que podemos poner en el LOCALS
-  //por defecto, se hace en el app.js, y que estaran en TODOS LOS OBJETOS RESPONSE que
-  //HAGAMOS.
 
-  menu = [{
-      slug: '/products',
-      title: 'Products',
-    },
-    {
-      slug: '/cart',
-      title: 'Shopping Cart',
-    },
-    {
-      slug: '/add',
-      title: 'Add',
-    },
-  ];
 
-  res.render('extendingLayout', {
-    title: 'E-Commerce',
-    menu: menu
-  });
-});
+router.get('/', productsController.homePage);
 
 
 
 //renderizamos un .pug que extiende (completa) el testLayout.pug
-router.get('/extendinglayout/', (req, res) => {
-  //le pasamos un objeto con el "title" de la página. Esta información se pone en
-  //la estructura "LOCALS" de la RESPONSE. Otras variables
-  //que necesita el layout las sacará de valores que podemos poner en el LOCALS
-  //por defecto, se hace en el app.js, y que estaran en TODOS LOS OBJETOS RESPONSE que
-  //HAGAMOS.
-
-  menu = [{
-      slug: '/products',
-      title: 'Products',
-    },
-  ];
-
-  res.render('extendingLayout', {
-    title: 'E-Commerce',
-    menu: menu
-  });
-});
+router.get('/extendinglayout/', productsController.homePage);
+ 
 
 
 //Router calls a Controller and its method to do the job
@@ -120,5 +81,7 @@ router.get('/cart', productsController.cart);
 
 
 router.post('/products', catchErrors(productsController.createCart));
-router.post('/cart', catchErrors(productsController.deleteCart))
+router.post('/cart', catchErrors(productsController.deleteCart));
+
+
 module.exports = router;
