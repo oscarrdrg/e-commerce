@@ -29,5 +29,4 @@ cartSchema.pre('findOne', autopopulate);
 
 
 
-
 module.exports = mongoose.model('Cart', cartSchema);

@@ -10,11 +10,15 @@ const routes = require('./routes/index');
 const helpers = require('./helpers');
 const errorHandlers = require('./handlers/errorHandlers');
 const passport = require('passport');
+const cors = require('cors');
 require('./handlers/passport');
 
 
 // create our Express app
 const app = express();
+
+// usamos corse para el paypal
+app.use(cors());
 
 // serves up static files from the public folder. Anything in public/ will just be 
 // served up as the file it is

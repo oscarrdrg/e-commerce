@@ -9,6 +9,7 @@ const authController = require('../controllers/authController');
 //Import controllers
 const productsController = require('../controllers/productsController');
 const userController = require('../controllers/userController');
+const paypalController = require('../controllers/paypalController');
 
 
 
@@ -18,7 +19,7 @@ router.get('/', productsController.homePage);
 
 //renderizamos un .pug que extiende (completa) el testLayout.pug
 router.get('/extendinglayout/', productsController.homePage);
- 
+
 
 
 //Router calls a Controller and its method to do the job
@@ -82,6 +83,9 @@ router.get('/cart', productsController.cart);
 
 router.post('/products', catchErrors(productsController.createCart));
 router.post('/cart', catchErrors(productsController.deleteCart));
+
+router.get('/checkout', authController.isLoggedIn, catchErrors(paypalController.doPayment));
+
 
 
 module.exports = router;

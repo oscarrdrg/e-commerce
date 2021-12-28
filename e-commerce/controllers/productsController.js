@@ -2,6 +2,9 @@ const multer = require('multer');
 const uuid = require('uuid');
 const jimp = require('jimp');
 const mongoose = require('mongoose');
+const {
+    db
+} = require('../models/Cart');
 const Product = mongoose.model('Product');
 const Cart = mongoose.model('Cart');
 const multerOptions = {
@@ -23,7 +26,7 @@ exports.homePage = async (req, res) => {
     const carts = await Cart.find();
     let totalCarts = 0;
 
-    carts.forEach((cart)=>{
+    carts.forEach((cart) => {
         totalCarts = totalCarts + cart.num;
     })
     res.render('extendingLayout', {
@@ -50,17 +53,61 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.createCart = async (req, res) => {
+
     const carts = await Cart.find();
-    const cart = new Cart({
-        idProduct: req.body.id,
-        user: req.body.user,
-        num: 1
-    });
-    
-    const savedCart = await cart.save();
-    console.log('Cart saved!');
-    req.flash('success', `Successfully added to cart ${cart.idProduct}.`);
-    res.redirect(`/products/`);
+
+    if (carts.length == 0) {
+        const newCart = new Cart({
+            idProduct: req.body.id,
+            user: req.body.user,
+            num: 1
+        });
+
+        const savedCart = newCart.save();
+        console.log('Cart saved!');
+        req.flash('success', `Successfully added to cart ${newCart.idProduct}.`);
+        res.redirect(`/products/`);
+
+
+    } else {
+        carts.forEach((cart) => {
+
+            if (cart.idProduct._id == req.body.id) {
+                db.collection("carts").updateOne({
+                    idProduct: req.body.id
+                }, {
+                    $inc: {
+                        num: 5
+                    }
+                }, {
+                    function (error, result) {
+                        if (error) PromiseRejectionEvent(error);
+                        else resolve(result);
+                    }
+                })
+        
+                console.log('Cart saved!');
+                req.flash('success', `Successfully added to cart ${cart.idProduct._id}.`);
+                res.redirect(`/products/`);
+            } else {
+
+                const newCart = new Cart({
+                    idProduct: req.body.id,
+                    user: req.body.user,
+                    num: 1
+                });
+
+                const savedCart = newCart.save();
+                console.log('Cart saved!');
+                req.flash('success', `Successfully added to cart ${newCart.idProduct}.`);
+                res.redirect(`/products/`);
+
+            }
+        });
+
+    }
+
+
 };
 
 exports.deleteCart = async (req, res) => {
@@ -153,7 +200,7 @@ exports.cart = async (req, res) => {
     const carts = await Cart.find();
     let precioFinal = 0;
 
-    carts.forEach((cart)=>{
+    carts.forEach((cart) => {
         precioFinal = precioFinal + cart.idProduct.price;
     })
 
