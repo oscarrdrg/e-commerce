@@ -1,7 +1,6 @@
 mixin productCard(product = {})
     .product
         .card-body
-            a.card-link(href=`/products/${product._id}/edit`) Edit
         img.card-img-top.imgfluid(src=`/uploads/${product.photo || 'product.png'}`)
         .card-body
             h5.card-title

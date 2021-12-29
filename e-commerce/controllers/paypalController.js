@@ -1,6 +1,3 @@
-const cors = require('cors');
-const request = require('request');
-const express = require('express');
 const paypal = require('paypal-rest-sdk');
 const Cart = require('../models/Cart');
 
@@ -20,8 +17,8 @@ exports.doPayment = async (req, res) => {
 
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
-        
-    });
+
+    })
 
 
     const create_payment_json = {
@@ -34,7 +31,7 @@ exports.doPayment = async (req, res) => {
             "cancel_url": "http://localhost:7777/cancel"
         },
         "transactions": [{
-            
+
             "amount": {
                 "currency": "EUR",
                 "total": precioFinal
@@ -49,7 +46,7 @@ exports.doPayment = async (req, res) => {
         } else {
             for (let i = 0; i < payment.links.length; i++) {
                 if (payment.links[i].rel === 'approval_url') {
-                    req.flash('success', 'Tu compra se ha realizado con exito');
+                    req.flash('success', 'Compra realizada con exito')
                     res.redirect(payment.links[i].href);
                 }
             }
@@ -58,3 +55,44 @@ exports.doPayment = async (req, res) => {
 
 
 }
+
+exports.executePayment = async (res, req) => {
+
+    //const payerId = req.query.PayerID;
+    const paymentId = "PAYID-MHGLBNY12J89260UN3101402"
+
+    const carts = await Cart.find();
+    let precioFinal = 0;
+
+    carts.forEach((cart) => {
+        precioFinal = precioFinal + (cart.idProduct.price * cart.num);
+
+    })
+
+
+
+    const execute_payment_json = {
+        "payer_id": "956LUG5Q7YAHJ",
+        "transactions": [{
+            "amount": {
+                "currency": "EUR",
+                "total": precioFinal
+            }
+        }]
+    };
+
+    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+        //When error occurs when due to non-existent transaction, throw an error else log the transaction details in the console then send a Success string reposponse to the user.
+        if (error) {
+            console.log(error.response);
+            throw error;
+        } else {
+            console.log(JSON.stringify(payment));
+            res.send('Success')
+            
+        }
+    });
+
+}
+
+exports.isCanceled = (req, res) => res.send('Cancelled')
