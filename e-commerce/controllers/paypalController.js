@@ -19,7 +19,8 @@ exports.doPayment = async (req, res) => {
     let precioFinal = 0;
 
     carts.forEach((cart) => {
-        precioFinal = precioFinal + cart.idProduct.price;
+        precioFinal = precioFinal + (cart.idProduct.price * cart.num);
+        
     });
 
 

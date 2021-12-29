@@ -54,59 +54,32 @@ exports.createProduct = async (req, res) => {
 
 exports.createCart = async (req, res) => {
 
+    let contador = 1;
     const carts = await Cart.find();
 
-    if (carts.length == 0) {
-        const newCart = new Cart({
-            idProduct: req.body.id,
-            user: req.body.user,
-            num: 1
-        });
+    carts.forEach((cart) => {
 
-        const savedCart = newCart.save();
-        console.log('Cart saved!');
-        req.flash('success', `Successfully added to cart ${newCart.idProduct}.`);
-        res.redirect(`/products/`);
+        if (cart.idProduct._id == req.body.id) {
+            contador = cart.num + 1;
+        }
+
+        if(cart.idProduct._id == req.body.id && cart.num <= contador){
+            cart.remove();
+        }
+
+    })
+
+    const newCart = new Cart({
+        idProduct: req.body.id,
+        user: req.body.user,
+        num: contador
+    });
 
 
-    } else {
-        carts.forEach((cart) => {
-
-            if (cart.idProduct._id == req.body.id) {
-                db.collection("carts").updateOne({
-                    idProduct: req.body.id
-                }, {
-                    $inc: {
-                        num: 5
-                    }
-                }, {
-                    function (error, result) {
-                        if (error) PromiseRejectionEvent(error);
-                        else resolve(result);
-                    }
-                })
-        
-                console.log('Cart saved!');
-                req.flash('success', `Successfully added to cart ${cart.idProduct._id}.`);
-                res.redirect(`/products/`);
-            } else {
-
-                const newCart = new Cart({
-                    idProduct: req.body.id,
-                    user: req.body.user,
-                    num: 1
-                });
-
-                const savedCart = newCart.save();
-                console.log('Cart saved!');
-                req.flash('success', `Successfully added to cart ${newCart.idProduct}.`);
-                res.redirect(`/products/`);
-
-            }
-        });
-
-    }
-
+    const savedCart = newCart.save();
+    console.log('Cart saved!');
+    req.flash('success', `Successfully added to cart ${newCart.idProduct}.`);
+    res.redirect(`/products/`);
 
 };
 
@@ -201,7 +174,8 @@ exports.cart = async (req, res) => {
     let precioFinal = 0;
 
     carts.forEach((cart) => {
-        precioFinal = precioFinal + cart.idProduct.price;
+        precioFinal = precioFinal + (cart.idProduct.price * cart.num);
+        
     })
 
     res.render('cart', {
