@@ -146,19 +146,11 @@ exports.upload = async (req, res, next) => {
 
 exports.getProducts = async (req, res) => {
     const products = await Product.find();
-    const carts = await Cart.find({
-        user: req.user._id
-    });
-    let totalCarts = 0;
 
-    carts.forEach((cart) => {
-        totalCarts = totalCarts + cart.num;
-
-    })
     res.render('products', {
         title: 'Products',
-        products: products,
-        total: totalCarts
+        products: products
+
     });
 };
 
@@ -201,7 +193,7 @@ exports.cart = async (req, res) => {
         carts: carts,
         precio: precioFinal,
         total: totalCarts
-        
+
     });
 
 
