@@ -28,8 +28,11 @@ exports.doPayment = async (req, res) => {
         "payer": {
             "payment_method": "paypal"
         },
+        "application_context": {
+            brand_name: "E-Commerce"
+        },
         "redirect_urls": {
-            "return_url": "http://localhost:7777/products",
+            "return_url": "http://localhost:7777/success",
             "cancel_url": "http://localhost:7777/cancel"
         },
         "transactions": [{
@@ -58,10 +61,12 @@ exports.doPayment = async (req, res) => {
 
 }
 
-exports.executePayment = async (res, req) => {
+exports.executePayment = async (req, res) => {
+
 
     //const payerId = req.query.PayerID;
-    const paymentId = "PAYID-MHGLBNY12J89260UN3101402"
+    const payerId = req.query.PayerID;
+    const paymentId = req.query.paymentId;
 
     const carts = await Cart.find({
         user: req.user._id
@@ -76,7 +81,7 @@ exports.executePayment = async (res, req) => {
 
 
     const execute_payment_json = {
-        "payer_id": "956LUG5Q7YAHJ",
+        "payer_id": payerId,
         "transactions": [{
             "amount": {
                 "currency": "EUR",
@@ -92,7 +97,8 @@ exports.executePayment = async (res, req) => {
             throw error;
         } else {
             console.log(JSON.stringify(payment));
-            res.send('Success')
+            req.flash('success', 'Compra realizada con exito')
+            res.redirect('/products')
 
         }
     });
