@@ -55,7 +55,9 @@ exports.createProduct = async (req, res) => {
 exports.createCart = async (req, res) => {
 
     let contador = 1;
-    const carts = await Cart.find();
+    const carts = await Cart.find({
+        user:req.user._id
+    });
 
     carts.forEach((cart) => {
 
@@ -86,7 +88,7 @@ exports.createCart = async (req, res) => {
 exports.deleteCart = async (req, res) => {
     const cart = await Cart.findOne({
         idProduct: req.body.id,
-        user: req.body.user
+        user: req.user._id
     })
     if (cart) {
         cart.remove();
@@ -170,7 +172,9 @@ exports.searchProducts = async (req, res) => {
 };
 
 exports.cart = async (req, res) => {
-    const carts = await Cart.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
     let precioFinal = 0;
 
     carts.forEach((cart) => {

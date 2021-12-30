@@ -12,7 +12,9 @@ paypal.configure({
 
 exports.doPayment = async (req, res) => {
 
-    const carts = await Cart.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
     let precioFinal = 0;
 
     carts.forEach((cart) => {
@@ -61,7 +63,9 @@ exports.executePayment = async (res, req) => {
     //const payerId = req.query.PayerID;
     const paymentId = "PAYID-MHGLBNY12J89260UN3101402"
 
-    const carts = await Cart.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
     let precioFinal = 0;
 
     carts.forEach((cart) => {
@@ -89,7 +93,7 @@ exports.executePayment = async (res, req) => {
         } else {
             console.log(JSON.stringify(payment));
             res.send('Success')
-            
+
         }
     });
 
