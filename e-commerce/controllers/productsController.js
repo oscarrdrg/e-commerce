@@ -23,17 +23,10 @@ const multerOptions = {
 
 //exports -> global variable -> everything within can be imported
 exports.homePage = async (req, res) => {
-    const carts = await Cart.find({
-        user: req.user._id
-    });
-    let totalCarts = 0;
 
-    carts.forEach((cart) => {
-        totalCarts = totalCarts + cart.num;
-    })
     res.render('extendingLayout', {
         title: 'E-Commerce',
-        total: totalCarts
+
     }); //finalmente, hacemos el RESPONSE.
 };
 
