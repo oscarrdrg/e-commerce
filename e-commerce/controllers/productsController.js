@@ -23,7 +23,9 @@ const multerOptions = {
 
 //exports -> global variable -> everything within can be imported
 exports.homePage = async (req, res) => {
-    const carts = await Cart.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
     let totalCarts = 0;
 
     carts.forEach((cart) => {
@@ -56,7 +58,7 @@ exports.createCart = async (req, res) => {
 
     let contador = 1;
     const carts = await Cart.find({
-        user:req.user._id
+        user: req.user._id
     });
 
     carts.forEach((cart) => {
@@ -65,7 +67,7 @@ exports.createCart = async (req, res) => {
             contador = cart.num + 1;
         }
 
-        if(cart.idProduct._id == req.body.id && cart.num <= contador){
+        if (cart.idProduct._id == req.body.id && cart.num <= contador) {
             cart.remove();
         }
 
@@ -144,9 +146,19 @@ exports.upload = async (req, res, next) => {
 
 exports.getProducts = async (req, res) => {
     const products = await Product.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
+    let totalCarts = 0;
+
+    carts.forEach((cart) => {
+        totalCarts = totalCarts + cart.num;
+
+    })
     res.render('products', {
         title: 'Products',
-        products: products
+        products: products,
+        total: totalCarts
     });
 };
 
@@ -176,16 +188,20 @@ exports.cart = async (req, res) => {
         user: req.user._id
     });
     let precioFinal = 0;
+    let totalCarts = 0;
 
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
-        
+        totalCarts = totalCarts + cart.num;
+
     })
 
     res.render('cart', {
         title: 'Shopping Cart',
         carts: carts,
-        precio: precioFinal
+        precio: precioFinal,
+        total: totalCarts
+        
     });
 
 
