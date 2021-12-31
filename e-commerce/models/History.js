@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema({
 });
 
 const historySchema = new mongoose.Schema({
+    idPaypal: String,
     productList: [productSchema],
     date: Date,
     precioTotal: Number,

@@ -203,7 +203,7 @@ exports.history = async (req, res) => {
     const carts = await Cart.find({
         user: req.user._id
     });
-    console.log(histories)
+    
     res.render('history', {
         title: 'History',
         histories: histories,

@@ -2,12 +2,14 @@ mixin productHistory(history = {})
     .product
         p.cardtext= history.date
             h5.card-title
-                |PURCHEASE ID:<br>
-                i.a(style='color: black') #{history._id}
-
+                |PayPal ID:<br>
+                i.a(style='color: black') #{history.idPaypal}
+            |PURCHASE ID:<br>
+            i.a(style='color: black') #{history._id}<br>
+            span --------------------------------<p>
             each product in history.productList
                 b.cardtext= product.name
                 p.cardtext= "Price: " +product.price+"€"
                 p.cardtext= "Num: " +product.num
                 span --------------------------------<p>
-            b.p.cardtext= "Total Price: "+history.precioTotal+"€"
+            b.cardtext= "Total Price: "+history.precioTotal+"€"

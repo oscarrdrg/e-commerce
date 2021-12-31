@@ -109,6 +109,7 @@ exports.executePayment = async (req, res) => {
             req.flash('success', 'Compra realizada con exito')
             res.redirect('/products')
             const history = new History({
+                idPaypal: paymentId,
                 productList: listProduct,
                 date: Date.now(),
                 precioTotal: precioFinal,
