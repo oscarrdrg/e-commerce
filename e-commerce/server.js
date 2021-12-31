@@ -5,6 +5,7 @@ require('dotenv').config({
 require('./models/Product');
 require('./models/User');
 require('./models/Cart');
+require('./models/History');
 
 // Connect to our Database and handle any bad connections
 mongoose.connect(process.env.DATABASE, {

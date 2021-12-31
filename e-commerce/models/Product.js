@@ -13,32 +13,34 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
     photo: String,
+    num: Number
 
 });
 
 
 // ********PRE-SAVE HOOK********* -
-productSchema.pre('save', async function(next) {
+productSchema.pre('save', async function (next) {
     if (!this.isModified('name')) {
-    next();
-    return; //stop this function from running
+        next();
+        return; //stop this function from running
     }
     this.slug = slug(this.name);
-   
+
     const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
-    const productWithSlug = await this.constructor.find({ slug: slugRegEx
-   });
+    const productWithSlug = await this.constructor.find({
+        slug: slugRegEx
+    });
     if (productWithSlug.length) { //if slug exists -> increment
-    this.slug = `${this.slug}-${productWithSlug.length+1}`;
+        this.slug = `${this.slug}-${productWithSlug.length+1}`;
     }
     next(); //follow the PIPELINE -> do the SAVE
-   });
+});
 
-   //link “Store” with the storeSchema and make it importable
+//link “Store” with the storeSchema and make it importable
 
-   // *********INDEXES**********
+// *********INDEXES**********
 productSchema.index({
     name: 'text', //we will search in the name attribute
     price: 'text' //we will search in the desc. attribute
-   });
- module.exports = mongoose.model('Product', productSchema);
+});
+module.exports = mongoose.model('Product', productSchema);

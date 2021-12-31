@@ -1,0 +1,13 @@
+extends layout
+
+include mixins/_productHistory
+
+block content
+    .container
+        h2= title
+        .products
+            each history in histories
+                +productHistory(history)
+ 
+
+    

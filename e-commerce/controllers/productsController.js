@@ -7,6 +7,7 @@ const {
 } = require('../models/Cart');
 const Product = mongoose.model('Product');
 const Cart = mongoose.model('Cart');
+const History = mongoose.model('History');
 const multerOptions = {
     storage: multer.memoryStorage(),
     fileFilter: function (req, file, next) {
@@ -190,4 +191,24 @@ exports.cart = async (req, res) => {
     });
 
 
+}
+
+exports.history = async (req, res) => {
+
+    const histories = await History.find({
+        user: req.user._id
+    });
+
+    const products = await Product.find();
+    const carts = await Cart.find({
+        user: req.user._id
+    });
+    console.log(histories)
+    res.render('history', {
+        title: 'History',
+        histories: histories,
+        products: products,
+        carts: carts
+
+    })
 }

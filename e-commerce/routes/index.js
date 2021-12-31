@@ -87,6 +87,7 @@ router.post('/cart', catchErrors(productsController.deleteCart));
 router.get('/checkout', authController.isLoggedIn, catchErrors(paypalController.doPayment));
 router.get('/success', authController.isLoggedIn, catchErrors(paypalController.executePayment));
 router.get('/cancel', paypalController.isCanceled);
+router.get('/history', productsController.history);
 
 
 

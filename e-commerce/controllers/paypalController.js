@@ -1,6 +1,8 @@
 const paypal = require('paypal-rest-sdk');
 const Cart = require('../models/Cart');
-
+const mongoose = require('mongoose');
+const History = mongoose.model('History');
+const Product = mongoose.model('Product');
 const CLIENT = 'AQX9vJhSkyNrGasUCsyw4jyHB5QhIEY84f6qZw0qxUOYBF69EQfs5bU8l5HwgZc9lGnqwgbmuFezv8hX'
 const SECRET = 'EOQ1eS7AeMqPBtvYhh0GfUFQwEYn_bJHbveTn3OLrEfV-qdppwH3nR-jdkGCaFZf8ygzjRVmTrk-dIBe'
 
@@ -67,6 +69,7 @@ exports.executePayment = async (req, res) => {
     //const payerId = req.query.PayerID;
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
+    let listProduct = [];
 
     const carts = await Cart.find({
         user: req.user._id
@@ -75,10 +78,16 @@ exports.executePayment = async (req, res) => {
 
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
+        const newProduct = new Product({
+            name: cart.idProduct.name,
+            price: cart.idProduct.price,
+            photo: cart.idProduct.photo,
+            slug: cart.idProduct.slug,
+            num: cart.num
+        })
+        listProduct.push(newProduct);
 
     })
-
-
 
     const execute_payment_json = {
         "payer_id": payerId,
@@ -99,6 +108,14 @@ exports.executePayment = async (req, res) => {
             console.log(JSON.stringify(payment));
             req.flash('success', 'Compra realizada con exito')
             res.redirect('/products')
+            const history = new History({
+                productList: listProduct,
+                date: Date.now(),
+                precioTotal: precioFinal,
+                user: req.user._id
+
+            });
+            const savedHistory = history.save();
 
         }
     });
