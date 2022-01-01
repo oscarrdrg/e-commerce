@@ -137,4 +137,9 @@ exports.executePayment = async (req, res) => {
 
 }
 
-exports.isCanceled = (req, res) => res.send('Cancelled')
+exports.isCanceled = (req, res) => {
+    req.flash('error', 'Purchase canceled')
+    res.redirect('/cart');
+   
+
+}
