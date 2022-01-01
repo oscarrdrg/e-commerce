@@ -79,7 +79,7 @@ exports.executePayment = async (req, res) => {
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
         const newProduct = new Product({
-            _id:  cart.idProduct._id,
+            _id: cart.idProduct._id,
             name: cart.idProduct.name,
             price: cart.idProduct.price,
             photo: cart.idProduct.photo,
@@ -107,7 +107,7 @@ exports.executePayment = async (req, res) => {
             throw error;
         } else {
             console.log(JSON.stringify(payment));
-            req.flash('success', 'Compra realizada con exito')
+            req.flash('success', 'Successful purchase')
             res.redirect('/products')
             const history = new History({
                 idPaypal: paymentId,
