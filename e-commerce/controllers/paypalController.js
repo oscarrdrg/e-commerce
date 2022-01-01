@@ -79,6 +79,7 @@ exports.executePayment = async (req, res) => {
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
         const newProduct = new Product({
+            _id:  cart.idProduct._id,
             name: cart.idProduct.name,
             price: cart.idProduct.price,
             photo: cart.idProduct.photo,

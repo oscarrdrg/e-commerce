@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
     photo: String,
-    num: Number
+    num: Number // este parametro lo usaramos cuando tengamos que pasar el numero de productos del carrito
 
 });
 
