@@ -18,11 +18,23 @@ exports.doPayment = async (req, res) => {
         user: req.user._id
     });
     let precioFinal = 0;
+    let item_list = [];
 
     carts.forEach((cart) => {
         precioFinal = precioFinal + (cart.idProduct.price * cart.num);
+        const item = {
+            name: cart.idProduct.name,
+            sku: cart.idProduct._id,
+            price: cart.idProduct.price,
+            currency: "EUR",
+            quantity: cart.num
+        }
+
+        item_list.push(item);
 
     })
+
+
 
 
     const create_payment_json = {
@@ -38,6 +50,9 @@ exports.doPayment = async (req, res) => {
             "cancel_url": "http://localhost:7777/cancel"
         },
         "transactions": [{
+            "item_list": {
+                "items": item_list
+            },
 
             "amount": {
                 "currency": "EUR",
