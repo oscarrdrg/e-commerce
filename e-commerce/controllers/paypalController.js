@@ -80,8 +80,6 @@ exports.doPayment = async (req, res) => {
 
 exports.executePayment = async (req, res) => {
 
-
-    //const payerId = req.query.PayerID;
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
     let listProduct = [];
