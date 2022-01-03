@@ -132,6 +132,10 @@ exports.executePayment = async (req, res) => {
             });
             const savedHistory = history.save();
 
+            carts.forEach((cart) => {
+                cart.remove();
+            })
+
         }
     });
 
@@ -140,6 +144,6 @@ exports.executePayment = async (req, res) => {
 exports.isCanceled = (req, res) => {
     req.flash('error', 'Purchase canceled')
     res.redirect('/cart');
-   
+
 
 }
